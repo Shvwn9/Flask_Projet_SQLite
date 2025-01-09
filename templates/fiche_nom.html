@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Recherche de Clients</h1>
-    <form action="/search" method="POST">
+    <form action="/fiche_nom/" method="POST">
         <label for="search">Nom du client :</label>
         <input type="text" id="search" name="search" placeholder="Entrez le nom du client">
         <button type="submit">Rechercher</button>
@@ -20,7 +20,8 @@
             <tr>
                 <th>ID</th>
                 <th>Nom</th>
-                <th>Email</th>
+                <th>Prénom</th>
+                <th>Adresse</th>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +30,7 @@
                 <td>{{ client[0] }}</td>
                 <td>{{ client[1] }}</td>
                 <td>{{ client[2] }}</td>
+                <td>{{ client[3] }}</td>
             </tr>
             {% endfor %}
         </tbody>

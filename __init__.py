@@ -58,15 +58,17 @@ def ReadBDD():
     conn.close()
     return render_template('read_data.html', data=data)
 
-@app.route('/fiche_nom/')
+@app.route('/fiche_nom/', methods=['GET', 'POST'])
 def search():
-    search_query = request.form['search']
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients WHERE name LIKE ?', ('%' + search_query + '%',))
-    data = cursor.fetchall()
-    conn.close()
-    return render_template('fiche_nom.html', data=data)
+    if request.method == 'POST':
+        search_query = request.form['search']
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM clients WHERE name LIKE ?', ('%' + search_query + '%',))
+        data = cursor.fetchall()
+        conn.close()
+        return render_template('fiche_nom.html', data=data)
+    return render_template('fiche_nom.html', data=None)
 
 @app.route('/enregistrer_client', methods=['GET'])
 def formulaire_client():

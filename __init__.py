@@ -66,7 +66,7 @@ def search():
     cursor.execute('SELECT * FROM clients WHERE name LIKE ?', ('%' + search_query + '%',))
     data = cursor.fetchall()
     conn.close()
-    return render_template('read_data.html', data=data)
+    return render_template('fiche_nom.html', data=data)
 
 @app.route('/enregistrer_client', methods=['GET'])
 def formulaire_client():

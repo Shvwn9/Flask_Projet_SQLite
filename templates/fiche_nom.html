@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche Clients</title>
+</head>
+<body>
+    <h1>Recherche de Clients</h1>
+    <form action="/search" method="POST">
+        <label for="search">Nom du client :</label>
+        <input type="text" id="search" name="search" placeholder="Entrez le nom du client">
+        <button type="submit">Rechercher</button>
+    </form>
+
+    {% if data %}
+    <h2>Résultats de la recherche :</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in data %}
+            <tr>
+                <td>{{ client[0] }}</td>
+                <td>{{ client[1] }}</td>
+                <td>{{ client[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Aucun client trouvé.</p>
+    {% endif %}
+</body>
+</html>

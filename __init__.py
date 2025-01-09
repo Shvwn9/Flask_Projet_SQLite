@@ -58,7 +58,7 @@ def ReadBDD():
     conn.close()
     return render_template('read_data.html', data=data)
 
-@app.route('/fiche_nom/', methods=['POST'])
+@app.route('/fiche_nom/')
 def search():
     search_query = request.form['search']
     conn = sqlite3.connect('database.db')

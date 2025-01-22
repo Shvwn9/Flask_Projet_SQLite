@@ -1,5 +1,5 @@
 import sqlite3
-connection = sqlite3.connect('database.db')
+connection = sqlite3.connect('database2.db')
 
 # Chargement et exécution du fichier SQL
 with open('schema2.sql', 'r') as f:

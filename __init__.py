@@ -66,7 +66,7 @@ def ReadBDD_livre():
     cursor.execute('SELECT * FROM Books;')
     data = cursor.fetchall()
     conn.close()
-    return render_template('read_data.html', data=data)
+    return render_template('read_data2.html', data=data)
 
 
 

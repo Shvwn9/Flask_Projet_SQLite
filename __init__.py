@@ -60,7 +60,7 @@ def ReadBDD():
 
 
 @app.route('/consultation2/')
-def ReadBDD():
+def ReadBDD_livre():
     conn = sqlite3.connect('LibraryManagement.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM Books;')

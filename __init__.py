@@ -157,16 +157,16 @@ def search_client():
 
 #---------------------------SEQUENCE 6----------------------------
 
-@app.route('/consultation_livre/')
+@app.route('/consultation2/')
 def ReadBDD_livre():
     conn = sqlite3.connect('database2.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM livres;')
+    cursor.execute('SELECT * FROM Books;')
     data = cursor.fetchall()
     conn.close()
 
     # Passer les données au template pour affichage
-    return render_template('read_livre.html', data=data)
+    return render_template('read_data2.html', data=data)
 
 if __name__ == "__main__":
   app.run(debug=True)

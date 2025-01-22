@@ -58,6 +58,19 @@ def ReadBDD():
     conn.close()
     return render_template('read_data.html', data=data)
 
+
+@app.route('/consultation2/')
+def ReadBDD():
+    conn = sqlite3.connect('L.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+    return render_template('read_data.html', data=data)
+
+
+
+
 @app.route('/fiche_nom/', methods=['GET', 'POST'])
 def search():
     data = None

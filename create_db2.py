@@ -1,11 +1,10 @@
 import sqlite3
+connection = sqlite3.connect('database.db')
 
-# Connexion à la base de données SQLite
-connection = sqlite3.connect('LibraryManagement.db')
-
-# Chargement du schéma SQL
-with open('schema2.sql') as f:
-    connection.executescript(f.read())
+# Chargement et exécution du fichier SQL
+with open('schema2.sql', 'r') as f:
+    sql_script = f.read()
+    connection.executescript(sql_script)
 
 # Création d'un curseur pour exécuter des requêtes SQL
 cur = connection.cursor()

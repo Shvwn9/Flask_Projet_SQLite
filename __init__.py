@@ -71,7 +71,7 @@ def consultation2():
 
 @app.route('/consultation2/delete/<int:book_id>', methods=['POST'])
 def delete_book(book_id):
-    connection = sqlite3.connect('database.db')
+    connection = sqlite3.connect('database2.db')
     cur = connection.cursor()
     cur.execute("DELETE FROM Books WHERE id = ?", (book_id,))
     connection.commit()
@@ -84,7 +84,7 @@ def add_book():
     author = request.form['author']
     isbn = request.form['isbn']
     stock = request.form['stock']
-    connection = sqlite3.connect('database.db')
+    connection = sqlite3.connect('database2.db')
     cur = connection.cursor()
     cur.execute("INSERT INTO Books (title, author, isbn, stock) VALUES (?, ?, ?, ?)",
                 (title, author, isbn, stock))

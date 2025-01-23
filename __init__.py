@@ -1,51 +1,14 @@
-from flask import Flask, render_template_string, render_template, jsonify, request, redirect, url_for, session, g
+from flask import Flask, render_template_string, render_template, jsonify, request, redirect, url_for, session
 from flask import render_template
 from flask import json
 from urllib.request import urlopen
 from werkzeug.utils import secure_filename
 import sqlite3
-import time  # Pour gérer le timestamp
 
 app = Flask(__name__)                                                                                                                  
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 
-#------------------------SEQUENCE 5---------------------------
-
-DB_FILE = "database.d"
-DB_LIVRE = "database2.db"
-
-# Durée maximale d'inactivité en secondes (10 minutes)
-SESSION_TIMEOUT = 10 * 60
-
-# Rendre la session disponible dans tous les templates
-@app.context_processor
-def inject_session():
-    return dict(session=session)
-
 # Fonction pour créer une clé "authentifie" dans la session utilisateur
-# Vérification des rôles dans la session 
-def est_admin():
-    return session.get('role') == 'admin'
-
-def est_user():
-    return session.get('role') == 'user'
-
-# Vérification du timeout avant chaque requête
-@app.before_request
-def verifier_inactivite():
-    # Vérifier si l'utilisateur est connecté
-    if 'role' in session:
-        dernier_acces = session.get('dernier_acces', None)
-        maintenant = time.time()
-        
-        # Si le dernier accès est défini et dépasse le timeout
-        if dernier_acces and (maintenant - dernier_acces > SESSION_TIMEOUT):
-            # Supprimer la session et rediriger vers la déconnexion
-            session.clear()
-            return redirect(url_for('logout'))
-        
-        # Mettre à jour le timestamp du dernier accès
-        session['dernier_acces'] = maintenant
 def est_authentifie():
     return session.get('authentifie')
 

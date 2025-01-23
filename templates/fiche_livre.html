@@ -3,91 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recherche de Livres</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        #results {
-            margin-top: 20px;
-        }
-    </style>
-    <script>
-        // Fonction pour rechercher des livres
-        function searchBooks(event) {
-            event.preventDefault();
-
-            const searchValue = document.getElementById('search').value;
-
-            // Envoyer une requête POST via fetch
-            fetch('/recherche_livre/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ search: searchValue })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const resultsDiv = document.getElementById('results');
-                if (data.success) {
-                    // Générer un tableau avec les résultats
-                    let tableHtml = `
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Titre</th>
-                                    <th>Auteur</th>
-                                    <th>ISBN</th>
-                                    <th>Stock</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                    `;
-                    data.books.forEach(book => {
-                        tableHtml += `
-                            <tr>
-                                <td>${book.id}</td>
-                                <td>${book.title}</td>
-                                <td>${book.author}</td>
-                                <td>${book.isbn}</td>
-                                <td>${book.stock}</td>
-                            </tr>
-                        `;
-                    });
-                    tableHtml += `</tbody></table>`;
-                    resultsDiv.innerHTML = tableHtml;
-                } else {
-                    resultsDiv.innerHTML = '<p>Aucun livre trouvé.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Erreur lors de la recherche :', error);
-                document.getElementById('results').innerHTML = '<p>Erreur lors de la recherche.</p>';
-            });
-        }
-    </script>
+    <title>Recherche livre</title>
 </head>
 <body>
-    <h1>Recherche de Livres</h1>
-    <form onsubmit="searchBooks(event)">
-        <label for="search">Titre du livre :</label>
-        <input type="text" id="search" name="search" placeholder="Entrez le titre du livre">
+    <h1>Recherche de livre</h1>
+    <form action="/fiche_livre/" method="POST">
+        <label for="search">titre du livre :</label>
+        <input type="text" id="search" name="search" placeholder="Entrez le nom du livre">
         <button type="submit">Rechercher</button>
     </form>
 
-    <div id="results">
-        <!-- Les résultats de la recherche seront affichés ici -->
-    </div>
+    {% if data %}
+    <h2>Résultats de la recherche :</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Adresse</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in data %}
+            <tr>
+                <td>{{ client[0] }}</td>
+                <td>{{ client[1] }}</td>
+                <td>{{ client[2] }}</td>
+                <td>{{ client[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Aucun client trouvé.</p>
+    {% endif %}
 </body>
 </html>

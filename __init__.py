@@ -111,7 +111,7 @@ def search():
     return render_template('fiche_nom.html', data=data)
 
 @app.route('/fiche_livre/', methods=['GET', 'POST'])
-def search():
+def searchbooks():
     data = None
     if request.method == 'POST':
         search_query = request.form['search']

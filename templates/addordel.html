@@ -20,6 +20,59 @@
             margin-top: 20px;
         }
     </style>
+    <script>
+        // Supprimer un livre via AJAX
+        function deleteBook(bookId) {
+            fetch(`/consultation2/delete/${bookId}`, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Supprimer la ligne du tableau
+                    document.getElementById(`book-row-${bookId}`).remove();
+                } else {
+                    alert('Erreur lors de la suppression du livre.');
+                }
+            });
+        }
+
+        // Ajouter un livre via AJAX
+        function addBook(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            fetch('/consultation2/add', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Ajouter une nouvelle ligne au tableau
+                    const tableBody = document.querySelector('table tbody');
+                    const newRow = document.createElement('tr');
+                    newRow.id = `book-row-${data.book.id}`;
+                    newRow.innerHTML = `
+                        <td>${data.book.id}</td>
+                        <td>${data.book.title}</td>
+                        <td>${data.book.author}</td>
+                        <td>${data.book.isbn}</td>
+                        <td>${data.book.stock}</td>
+                        <td>
+                            <button onclick="deleteBook(${data.book.id})">Supprimer</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(newRow);
+
+                    // Réinitialiser le formulaire
+                    event.target.reset();
+                } else {
+                    alert('Erreur lors de l\'ajout du livre.');
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <h1>Consultation des Livres</h1>
@@ -36,16 +89,14 @@
         </thead>
         <tbody>
             {% for book in books %}
-            <tr>
+            <tr id="book-row-{{ book[0] }}">
                 <td>{{ book[0] }}</td>
                 <td>{{ book[1] }}</td>
                 <td>{{ book[2] }}</td>
                 <td>{{ book[3] }}</td>
                 <td>{{ book[4] }}</td>
                 <td>
-                    <form action="/consultation-livre/delete/{{ book[0] }}" method="post" style="display:inline;">
-                        <button type="submit">Supprimer</button>
-                    </form>
+                    <button onclick="deleteBook({{ book[0] }})">Supprimer</button>
                 </td>
             </tr>
             {% endfor %}
@@ -53,7 +104,7 @@
     </table>
 
     <h2>Ajouter un Livre</h2>
-    <form action="/consultation-livre/add" method="post">
+    <form onsubmit="addBook(event)">
         <label for="title">Titre :</label>
         <input type="text" id="title" name="title" required>
         <br><br>

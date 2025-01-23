@@ -59,26 +59,26 @@ def ReadBDD():
     return render_template('read_data.html', data=data)
 
 
-@app.route('/consultation2', methods=['GET'])
+@app.route('/consultation-livre', methods=['GET'])
 def ReadBDD_Books():
     connection = sqlite3.connect('database2.db')
     cur = connection.cursor()
     cur.execute("SELECT * FROM Books")
     books = cur.fetchall()
     connection.close()
-    return render_template('consultation2r.html', books=books)
+    return render_template('addordel.html', books=books)
 
 
-@app.route('/consultation2/delete/<int:book_id>', methods=['POST'])
+@app.route('/consultation-livre/delete/<int:book_id>', methods=['POST'])
 def delete_book(book_id):
     connection = sqlite3.connect('database2.db')
     cur = connection.cursor()
     cur.execute("DELETE FROM Books WHERE id = ?", (book_id,))
     connection.commit()
     connection.close()
-    return redirect(url_for('consultation2'))
+    return redirect(url_for('consultation-livre'))
 
-@app.route('/consultation2/add', methods=['POST'])
+@app.route('/consultation-livre/add', methods=['POST'])
 def add_book():
     title = request.form['title']
     author = request.form['author']
@@ -90,7 +90,7 @@ def add_book():
                 (title, author, isbn, stock))
     connection.commit()
     connection.close()
-    return redirect(url_for('consultation2'))
+    return redirect(url_for('consultation-livre'))
 
 @app.route('/fiche_nom/', methods=['GET', 'POST'])
 def search():

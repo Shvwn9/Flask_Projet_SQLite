@@ -80,21 +80,14 @@ def delete_book(book_id):
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
+
 @app.route('/consultation2/add', methods=['POST'])
 def add_book():
     try:
-        # Récupérer les données envoyées dans le corps de la requête (format JSON)
-        data = request.get_json()
-        title = data.get('title')
-        author = data.get('author')
-        isbn = data.get('isbn')
-        stock = data.get('stock')
-
-        # Vérifier que tous les champs sont présents
-        if not all([title, author, isbn, stock]):
-            return jsonify({'success': False, 'message': 'Tous les champs sont requis.'}), 400
-
-        # Connexion à la base de données et insertion du livre
+        title = request.form['title']
+        author = request.form['author']
+        isbn = request.form['isbn']
+        stock = request.form['stock']
         connection = sqlite3.connect('database2.db')
         cur = connection.cursor()
         cur.execute("INSERT INTO Books (title, author, isbn, stock) VALUES (?, ?, ?, ?)",
@@ -102,12 +95,9 @@ def add_book():
         connection.commit()
         book_id = cur.lastrowid
         connection.close()
-
-        # Retourner une réponse JSON avec les détails du livre ajouté
-        return jsonify({'success': True, 'book': {'id': book_id, 'title': title, 'author': author, 'isbn': isbn, 'stock': stock}}), 201
-
+        return jsonify({'success': True, 'book': {'id': book_id, 'title': title, 'author': author, 'isbn': isbn, 'stock': stock}})
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
+        return jsonify({'success': False, 'error': str(e)})
 
 
 @app.route('/fiche_nom/', methods=['GET', 'POST'])

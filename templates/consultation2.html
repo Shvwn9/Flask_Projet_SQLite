@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Livres</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consultation des Livres</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>ISBN</th>
+                <th>Stock</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book[0] }}</td>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+                <td>{{ book[3] }}</td>
+                <td>{{ book[4] }}</td>
+                <td>
+                    <form action="/consultation2/delete/{{ book[0] }}" method="post" style="display:inline;">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Ajouter un Livre</h2>
+    <form action="/consultation2/add" method="post">
+        <label for="title">Titre :</label>
+        <input type="text" id="title" name="title" required>
+        <br><br>
+        <label for="author">Auteur :</label>
+        <input type="text" id="author" name="author" required>
+        <br><br>
+        <label for="isbn">ISBN :</label>
+        <input type="text" id="isbn" name="isbn" required>
+        <br><br>
+        <label for="stock">Stock :</label>
+        <input type="number" id="stock" name="stock" required>
+        <br><br>
+        <button type="submit">Ajouter</button>
+    </form>
+</body>
+</html>

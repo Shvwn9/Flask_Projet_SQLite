@@ -110,6 +110,20 @@ def search():
         conn.close()
     return render_template('fiche_nom.html', data=data)
 
+@app.route('/fiche_livre/', methods=['GET', 'POST'])
+def search():
+    data = None
+    if request.method == 'POST':
+        search_query = request.form['search']
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT title, author, isbn, stock FROM Books WHERE nom LIKE ?', ('%' + search_query + '%',))
+        data = cursor.fetchall()
+        conn.close()
+    return render_template('fiche_livre.html', data=data)
+
+
+
 @app.route('/enregistrer_client', methods=['GET'])
 def formulaire_client():
     return render_template('formulaire.html')  # afficher le formulaire

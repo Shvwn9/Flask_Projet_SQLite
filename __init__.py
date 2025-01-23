@@ -115,7 +115,7 @@ def searchbooks():
     data = None
     if request.method == 'POST':
         search_query = request.form['search']
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect('database2.db')
         cursor = conn.cursor()
         cursor.execute('SELECT title, author, isbn, stock FROM Books WHERE nom LIKE ?', ('%' + search_query + '%',))
         data = cursor.fetchall()

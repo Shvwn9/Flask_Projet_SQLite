@@ -60,13 +60,13 @@ def ReadBDD():
 
 
 @app.route('/consultation2', methods=['GET'])
-def consultation2():
+def ReadBDD_Books():
     connection = sqlite3.connect('database2.db')
     cur = connection.cursor()
     cur.execute("SELECT * FROM Books")
     books = cur.fetchall()
     connection.close()
-    return render_template('consultation2.html', books=books)
+    return render_template('consultation2r.html', books=books)
 
 
 @app.route('/consultation2/delete/<int:book_id>', methods=['POST'])

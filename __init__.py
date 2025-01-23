@@ -59,8 +59,8 @@ def ReadBDD():
     return render_template('read_data.html', data=data)
 
 
-@app.route('/consultation-livre', methods=['GET'])
-def ReadBDD_Books():
+@app.route('/consultation2', methods=['GET'])
+def consultation2():
     connection = sqlite3.connect('database2.db')
     cur = connection.cursor()
     cur.execute("SELECT * FROM Books")
@@ -68,29 +68,35 @@ def ReadBDD_Books():
     connection.close()
     return render_template('addordel.html', books=books)
 
-
-@app.route('/consultation-livre/delete/<int:book_id>', methods=['POST'])
+@app.route('/consultation2/delete/<int:book_id>', methods=['POST'])
 def delete_book(book_id):
-    connection = sqlite3.connect('database2.db')
-    cur = connection.cursor()
-    cur.execute("DELETE FROM Books WHERE id = ?", (book_id,))
-    connection.commit()
-    connection.close()
-    return redirect(url_for('consultation-livre'))
+    try:
+        connection = sqlite3.connect('database2.db')
+        cur = connection.cursor()
+        cur.execute("DELETE FROM Books WHERE id = ?", (book_id,))
+        connection.commit()
+        connection.close()
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
 
-@app.route('/consultation-livre/add', methods=['POST'])
+@app.route('/consultation2/add', methods=['POST'])
 def add_book():
-    title = request.form['title']
-    author = request.form['author']
-    isbn = request.form['isbn']
-    stock = request.form['stock']
-    connection = sqlite3.connect('database2.db')
-    cur = connection.cursor()
-    cur.execute("INSERT INTO Books (title, author, isbn, stock) VALUES (?, ?, ?, ?)",
-                (title, author, isbn, stock))
-    connection.commit()
-    connection.close()
-    return redirect(url_for('consultation-livre'))
+    try:
+        title = request.form['title']
+        author = request.form['author']
+        isbn = request.form['isbn']
+        stock = request.form['stock']
+        connection = sqlite3.connect('database2.db')
+        cur = connection.cursor()
+        cur.execute("INSERT INTO Books (title, author, isbn, stock) VALUES (?, ?, ?, ?)",
+                    (title, author, isbn, stock))
+        connection.commit()
+        book_id = cur.lastrowid
+        connection.close()
+        return jsonify({'success': True, 'book': {'id': book_id, 'title': title, 'author': author, 'isbn': isbn, 'stock': stock}})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
 
 @app.route('/fiche_nom/', methods=['GET', 'POST'])
 def search():

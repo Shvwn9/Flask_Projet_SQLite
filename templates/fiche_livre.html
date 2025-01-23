@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche de Livres</title>
+</head>
+<body>
+    <h1>Recherche de Livres</h1>
+    <form action="/recherche_livre/" method="POST">
+        <label for="search">Titre du livre :</label>
+        <input type="text" id="search" name="search" placeholder="Entrez le titre du livre">
+        <button type="submit">Rechercher</button>
+    </form>
+
+    {% if data %}
+    <h2>Résultats de la recherche :</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>ISBN</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for livre in data %}
+            <tr>
+                <td>{{ livre[0] }}</td>
+                <td>{{ livre[1] }}</td>
+                <td>{{ livre[2] }}</td>
+                <td>{{ livre[3] }}</td>
+                <td>{{ livre[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Aucun livre trouvé.</p>
+    {% endif %}
+</body>
+</html>

@@ -112,39 +112,15 @@ def search():
 
 @app.route('/fiche_livre/', methods=['GET', 'POST'])
 def searchbooks():
+    data = None
     if request.method == 'POST':
-        # Vérifier si la requête est AJAX (JSON)
-        if request.is_json:
-            data = request.get_json()
-            search_query = data.get('search', '')
-
-            # Connexion à la base de données
-            conn = sqlite3.connect('database2.db')
-            cursor = conn.cursor()
-            cursor.execute('SELECT id, title, author, isbn, stock FROM Books WHERE title LIKE ?', ('%' + search_query + '%',))
-            books = cursor.fetchall()
-            conn.close()
-
-            # Retourner les résultats au format JSON pour AJAX
-            if books:
-                return jsonify({
-                    'success': True,
-                    'books': [{'id': book[0], 'title': book[1], 'author': book[2], 'isbn': book[3], 'stock': book[4]} for book in books]
-                })
-            else:
-                return jsonify({'success': False, 'books': []})
-        else:
-            # Si la requête n'est pas JSON, traiter comme une soumission classique
-            search_query = request.form['search']
-            conn = sqlite3.connect('database2.db')
-            cursor = conn.cursor()
-            cursor.execute('SELECT id, title, author, isbn, stock FROM Books WHERE title LIKE ?', ('%' + search_query + '%',))
-            data = cursor.fetchall()
-            conn.close()
-            return render_template('fiche_livre.html', data=data)
-
-    # Si la méthode est GET, charger simplement la page HTML
-    return render_template('fiche_livre.html', data=None)
+        search_query = request.form['search']
+        conn = sqlite3.connect('database2.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT title, author, isbn, stock FROM clients WHERE nom LIKE ?', ('%' + search_query + '%',))
+        data = cursor.fetchall()
+        conn.close()
+    return render_template('fiche_livre.html', data=data)
 
 
 

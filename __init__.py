@@ -110,18 +110,25 @@ def search():
         conn.close()
     return render_template('fiche_nom.html', data=data)
 
-@app.route('/fiche_livre/', methods=['GET', 'POST'])
-def searchbooks():
-    data = None
-    if request.method == 'POST':
-        search_query = request.form['search']
+@app.route('/fiche_livre/', methods=['POST'])
+def recherche_livre():
+    data = request.get_json()
+    search_query = data.get('search', '')
+    try:
         conn = sqlite3.connect('database2.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT title, author, isbn, stock FROM Books WHERE nom LIKE ?', ('%' + search_query + '%',))
-        data = cursor.fetchall()
+        cursor.execute('SELECT id, title, author, isbn, stock FROM Books WHERE title LIKE ?', ('%' + search_query + '%',))
+        books = cursor.fetchall()
         conn.close()
-    return render_template('fiche_livre.html', data=data)
-
+        if books:
+            return jsonify({
+                'success': True,
+                'books': [{'id': book[0], 'title': book[1], 'author': book[2], 'isbn': book[3], 'stock': book[4]} for book in books]
+            })
+        else:
+            return jsonify({'success': False, 'books': []})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
 
 
 @app.route('/enregistrer_client', methods=['GET'])

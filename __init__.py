@@ -114,11 +114,14 @@ def search():
 
 borrowed_books = []  
 
+def get_db_connection():
+    return sqlite3.connect('database2.db')
+
 @app.route('/fiche_livre/', methods=['GET', 'POST'])
 def searchbooks():
     books = None
-    all_books = []
-    conn = sqlite3.connect('database2.db')
+    all_books = []  
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     if request.method == 'POST':
@@ -135,13 +138,28 @@ def searchbooks():
 @app.route('/emprunter/', methods=['POST'])
 def emprunter():
     book_id = request.form['book_id']
-    conn = sqlite3.connect('database2.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT id, title, author, isbn FROM Books WHERE id = ?', (book_id,))
-    book = cursor.fetchone()
 
-    if book:
-        borrowed_books.append(book) 
+    cursor.execute('SELECT id, title, author, isbn, stock FROM Books WHERE id = ?', (book_id,))
+    book = cursor.fetchone()
+    if book and book[4] > 0:  # Vérifier si le stock est disponible
+        borrowed_books.append(book[:4])  # Ajouter aux emprunts sans stock
+        cursor.execute('UPDATE Books SET stock = stock - 1 WHERE id = ?', (book_id,))
+        conn.commit()
+
+    conn.close()
+    return redirect('/fiche_livre/')
+
+@app.route('/rendre/', methods=['POST'])
+def rendre():
+    book_id = request.form['book_id']
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    borrowed_books[:] = [book for book in borrowed_books if str(book[0]) != book_id]
+    cursor.execute('UPDATE Books SET stock = stock + 1 WHERE id = ?', (book_id,))
+    conn.commit()
+    
     conn.close()
     return redirect('/fiche_livre/')
 

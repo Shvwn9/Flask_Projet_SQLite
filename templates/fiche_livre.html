@@ -1,42 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recherche livre</title>
+    <title>Recherche de livre</title>
 </head>
 <body>
     <h1>Recherche de livre</h1>
     <form action="/fiche_livre/" method="POST">
-        <label for="search">titre du livre :</label>
-        <input type="text" id="search" name="search" placeholder="Entrez le nom du livre">
+        <label for="search">Titre du livre :</label>
+        <input type="text" id="search" name="search" placeholder="Entrez le nom du livre" required>
         <button type="submit">Rechercher</button>
     </form>
 
-    {% if data %}
+    {% if books %}
     <h2>Résultats de la recherche :</h2>
     <table border="1">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Adresse</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Année de publication</th>
             </tr>
         </thead>
         <tbody>
-            {% for client in data %}
+            {% for book in books %}
             <tr>
-                <td>{{ client[0] }}</td>
-                <td>{{ client[1] }}</td>
-                <td>{{ client[2] }}</td>
-                <td>{{ client[3] }}</td>
+                <td>{{ book[0] }}</td>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+                <td>{{ book[3] }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <p>Aucun client trouvé.</p>
+    <p>Aucun livre trouvé.</p>
     {% endif %}
 </body>
 </html>

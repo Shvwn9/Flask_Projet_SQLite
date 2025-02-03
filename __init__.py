@@ -115,7 +115,7 @@ def search():
 @app.route('/fiche_livre/', methods=['GET', 'POST'])
 def searchbooks():
     data = None
-    if request.method == 'GET':
+    if request.method == 'POST':
         search_query = request.form['search']
         conn = sqlite3.connect('database2.db')
         cursor = conn.cursor()

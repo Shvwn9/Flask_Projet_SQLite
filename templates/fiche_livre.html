@@ -41,7 +41,9 @@
                 <td>
                     <form action="/emprunter/" method="POST">
                         <input type="hidden" name="book_id" value="{{ book[0] }}">
-                        <button type="submit">Emprunter</button>
+                        <button type="submit" {% if book[4] == 0 %}disabled{% endif %}>
+                            {% if book[4] == 0 %} Indisponible {% else %} Emprunter {% endif %}
+                        </button>
                     </form>
                 </td>
             </tr>
@@ -57,6 +59,7 @@
                 <th>Titre</th>
                 <th>Auteur</th>
                 <th>ISBN</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -66,6 +69,12 @@
                 <td>{{ book[1] }}</td>
                 <td>{{ book[2] }}</td>
                 <td>{{ book[3] }}</td>
+                <td>
+                    <form action="/rendre/" method="POST">
+                        <input type="hidden" name="book_id" value="{{ book[0] }}">
+                        <button type="submit">Rendre</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

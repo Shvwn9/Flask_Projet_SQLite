@@ -14,18 +14,53 @@
     </form>
 
     {% if books %}
-    <h2>Résultats de la recherche :</h2>
+        <h2>Résultats de la recherche :</h2>
+    {% else %}
+        <h2>Liste des livres disponibles :</h2>
+    {% endif %}
+
     <table border="1">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Titre</th>
                 <th>Auteur</th>
                 <th>ISBN</th>
-                <th>Stock/th>
+                <th>Stock</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for book in books %}
+            {% for book in books or all_books %}
+            <tr>
+                <td>{{ book[0] }}</td>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+                <td>{{ book[3] }}</td>
+                <td>{{ book[4] }}</td>
+                <td>
+                    <form action="/emprunter/" method="POST">
+                        <input type="hidden" name="book_id" value="{{ book[0] }}">
+                        <button type="submit">Emprunter</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Historique des emprunts</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>ISBN</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in borrowed_books %}
             <tr>
                 <td>{{ book[0] }}</td>
                 <td>{{ book[1] }}</td>
@@ -35,8 +70,5 @@
             {% endfor %}
         </tbody>
     </table>
-    {% else %}
-    <p>Aucun livre trouvé.</p>
-    {% endif %}
 </body>
 </html>

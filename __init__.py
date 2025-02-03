@@ -112,18 +112,37 @@ def search():
         conn.close()
     return render_template('fiche_nom.html', data=data)
 
+borrowed_books = []  
+
 @app.route('/fiche_livre/', methods=['GET', 'POST'])
 def searchbooks():
     books = None
+    conn = sqlite3.connect('database2.db')
+    cursor = conn.cursor()
+
     if request.method == 'POST':
         search_query = request.form['search']
-        conn = sqlite3.connect('database2.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT title, author, isbn, stock FROM Books WHERE title LIKE ?', ('%' + search_query + '%',))
-        books = cursor.fetchall()    
-        conn.close()
-    
-    return render_template('fiche_livre.html', books=books)
+        cursor.execute('SELECT id, title, author, isbn, stock FROM Books WHERE title LIKE ?', ('%' + search_query + '%',))
+        books = cursor.fetchall()
+    else:
+        cursor.execute('SELECT id, title, author, isbn, stock FROM Books')
+        all_books = cursor.fetchall()
+
+    conn.close()
+    return render_template('fiche_livre.html', books=books, all_books=all_books, borrowed_books=borrowed_books)
+
+@app.route('/emprunter/', methods=['POST'])
+def emprunter():
+    book_id = request.form['book_id']
+    conn = sqlite3.connect('database2.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, title, author, isbn FROM Books WHERE id = ?', (book_id,))
+    book = cursor.fetchone()
+
+    if book:
+        borrowed_books.append(book) 
+    conn.close()
+    return redirect('/fiche_livre/')
 
 
 

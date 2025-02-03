@@ -114,15 +114,16 @@ def search():
 
 @app.route('/fiche_livre/', methods=['GET', 'POST'])
 def searchbooks():
-    data = None
+    books = None
     if request.method == 'POST':
         search_query = request.form['search']
         conn = sqlite3.connect('database2.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT title, author, isbn, stock FROM Books WHERE nom LIKE ?', ('%' + search_query + '%',))
-        data = cursor.fetchall()
+        cursor.execute('SELECT title, author, isbn, stock FROM Books WHERE title LIKE ?', ('%' + search_query + '%',))
+        books = cursor.fetchall()    
         conn.close()
-    return render_template('fiche_livre.html', data=data)
+    
+    return render_template('fiche_livre.html', books=books)
 
 
 

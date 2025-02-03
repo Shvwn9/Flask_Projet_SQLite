@@ -117,6 +117,7 @@ borrowed_books = []
 @app.route('/fiche_livre/', methods=['GET', 'POST'])
 def searchbooks():
     books = None
+    all_books = []
     conn = sqlite3.connect('database2.db')
     cursor = conn.cursor()
 
